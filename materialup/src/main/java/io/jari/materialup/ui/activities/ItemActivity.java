@@ -75,7 +75,8 @@ public class ItemActivity extends BaseActivity {
             @Override
             public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
                 super.onResourceReady(bitmap, glideAnimation);
-                Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
+                new Palette.Builder(bitmap).generate(new Palette.PaletteAsyncListener() {
+                    @Override
                     public void onGenerated(Palette p) {
                         int color = p.getVibrantColor(R.attr.colorPrimary);
                         commentAdapter.setColor(color);

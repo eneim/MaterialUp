@@ -138,8 +138,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             comments.setText(item.getComments());
             views.setText(item.getViews());
 
+            final ImageView image = (ImageView) cardView.findViewById(R.id.image);
             if (item.getImageUrl() != null && !item.getImageUrl().equals("")) {
-                final ImageView image = (ImageView) cardView.findViewById(R.id.image);
                 image.setVisibility(View.VISIBLE);
                 Log.d("listingadapter", "asking glide to load " + item.getImageUrl());
 
@@ -151,7 +151,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     request.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(image);
                 else request.into(image);
 
-            } else cardView.findViewById(R.id.image).setVisibility(View.GONE);
+            } else image.setVisibility(View.GONE);
 
             boolean generateLetter = false;
             try {
