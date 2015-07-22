@@ -145,7 +145,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
                 DrawableRequestBuilder<String> request = Glide.with(context)
                         .load(item.getImageUrl())
-                        .centerCrop();
+                        .fitCenter();
 
                 if (item.getImageUrl().endsWith(".gif"))
                     request.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(image);

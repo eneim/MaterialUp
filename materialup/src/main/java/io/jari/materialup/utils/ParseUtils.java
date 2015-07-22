@@ -41,6 +41,9 @@ public class ParseUtils {
             else item.setLabel("");
 
             Element category = element.select("a[href^=/posts/c]").first();
+            if (category == null)
+                continue;
+
             item.setCategoryLink(category.attr("href"));
             item.setCategoryName(category.text());
 
