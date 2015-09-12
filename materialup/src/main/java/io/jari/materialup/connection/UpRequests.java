@@ -9,9 +9,6 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.jari.materialup.R;
 import io.jari.materialup.exeptions.ItemException;
 import io.jari.materialup.exeptions.ItemImageException;
@@ -22,9 +19,13 @@ import io.jari.materialup.responses.ItemResponse;
 import io.jari.materialup.utils.ParseUtils;
 import io.jari.materialup.utils.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by rsicarelli on 7/15/15.
  */
+@Deprecated
 public class UpRequests {
 
     public static void getItemDetails(String path, String sort,int pageNum, final ItemCallback callback) {

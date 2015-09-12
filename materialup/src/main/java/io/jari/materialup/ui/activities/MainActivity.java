@@ -28,9 +28,7 @@ public class MainActivity extends NavDrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activty_main);
-
         ButterKnife.bind(this);
 
         setMenuIcon();
