@@ -24,7 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.jari.materialup.R;
 import io.jari.materialup.adapters.CommentAdapter;
-import io.jari.materialup.api.API;
+import io.jari.materialup.api.ApiClient;
 import io.jari.materialup.models.Comment;
 import io.jari.materialup.models.Item;
 import io.jari.materialup.models.ItemDetails;
@@ -100,7 +100,7 @@ public class ItemActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
-                    final ItemDetails itemDetails = API.getItemDetails(item.getId());
+                    final ItemDetails itemDetails = ApiClient.getItemDetails(item.getId());
 
                     runOnUiThread(new Runnable() {
                         @Override

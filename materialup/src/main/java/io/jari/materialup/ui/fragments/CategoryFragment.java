@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 import io.jari.materialup.R;
 import io.jari.materialup.adapters.CategoryAdapter;
 import io.jari.materialup.api.ApiClient;
-import io.jari.materialup.connection.UpRequests;
 import io.jari.materialup.exeptions.ItemException;
 import io.jari.materialup.exeptions.ItemImageException;
 import io.jari.materialup.interfaces.ItemCallback;
@@ -31,8 +30,7 @@ import io.jari.materialup.responses.ItemResponse;
 import io.jari.materialup.ui.activities.MainActivity;
 import io.jari.materialup.ui.listeners.EndlessRecyclerOnScrollListener;
 import io.jari.materialup.utils.StringUtils;
-import retrofit.Callback;
-import retrofit.Response;
+import retrofit.Retrofit;
 
 import java.util.List;
 import java.util.Random;
@@ -40,8 +38,8 @@ import java.util.Random;
 /**
  * Created by jari on 01/06/15.
  */
-public class CategoryFragment extends BaseFragment implements ItemCallback, ItemImageCallBack,
-    Callback<List<Post>> {
+public class CategoryFragment extends BaseFragment
+    implements ItemCallback, ItemImageCallBack, ApiClient.Callback<List<Post>> {
 
   private static final String TAG = CategoryFragment.class.getName();
 
@@ -90,7 +88,7 @@ public class CategoryFragment extends BaseFragment implements ItemCallback, Item
     ApiClient.postList(this);
 
     if (!StringUtils.isEmpty(path)) {
-      UpRequests.getItemDetails(path, mQueryParameter, 1, this);
+      // TODO
     }
 
     //initialize the adapter with empty data set
@@ -109,7 +107,7 @@ public class CategoryFragment extends BaseFragment implements ItemCallback, Item
       @Override
       public void onLoadMore(int current_page) {
         if (!StringUtils.isEmpty(path)) {
-          UpRequests.getItemDetails(path, mQueryParameter, current_page, CategoryFragment.this);
+          // TODO
         }
       }
     };
@@ -128,7 +126,6 @@ public class CategoryFragment extends BaseFragment implements ItemCallback, Item
             categoryAdapter.notifyItemRangeRemoved(0, size);
             ((RecyclerViewMaterialAdapter) recyclerView.getAdapter()).mvp_notifyDataSetChanged();
           }
-          UpRequests.getItemDetails(path, mQueryParameter, 1, CategoryFragment.this);
         }
       }
     });
@@ -155,20 +152,6 @@ public class CategoryFragment extends BaseFragment implements ItemCallback, Item
 //    dismissLoader();
   }
 
-  private void getRandomCover(List<Post> items) {
-    Post item = items.get(new Random().nextInt(items.size()));
-    UpRequests.getItemImage(item.getId() + "", this);
-  }
-
-  public void dismissLoader() {
-    progressBar.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        progressBar.setVisibility(View.GONE);
-      }
-    });
-  }
-
   @Override
   public void onItemError(ItemException error) {
     Toast.makeText(mActivity, error.getMessage(), Toast.LENGTH_SHORT).show();
@@ -186,8 +169,7 @@ public class CategoryFragment extends BaseFragment implements ItemCallback, Item
     Toast.makeText(mActivity, error.getMessage(), Toast.LENGTH_SHORT).show();
   }
 
-  @Override public void onResponse(Response<List<Post>> response) {
-    List<Post> items = response.body();
+  @Override public void onSuccess(List<Post> items, Retrofit retrofit) {
     if (categoryAdapter != null) {
       int currentSize = categoryAdapter.getItemCount();
       categoryAdapter.addItems(items);
@@ -199,6 +181,19 @@ public class CategoryFragment extends BaseFragment implements ItemCallback, Item
     }
     getRandomCover(items);
     dismissLoader();
+  }
+
+  private void getRandomCover(List<Post> items) {
+    Post item = items.get(new Random().nextInt(items.size()));
+  }
+
+  public void dismissLoader() {
+    progressBar.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        progressBar.setVisibility(View.GONE);
+      }
+    });
   }
 
   @Override public void onFailure(Throwable t) {

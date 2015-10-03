@@ -13,6 +13,7 @@ import io.jari.materialup.responses.ItemResponse;
 /**
  * Created by rsicarelli on 7/15/15.
  */
+@Deprecated
 public class ParseUtils {
 
     public static ItemResponse parseItems(String response) {

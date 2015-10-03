@@ -3,8 +3,12 @@ package io.jari.materialup.models;
 
 import com.google.gson.annotations.Expose;
 
-public class Category {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Category extends RealmObject {
+
+  @PrimaryKey
   @Expose
   private String name;
 

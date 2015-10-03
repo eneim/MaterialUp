@@ -4,49 +4,45 @@ package io.jari.materialup.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Thumbnails {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-    @SerializedName("teaser_url")
-    @Expose
-    private String teaserUrl;
-    @SerializedName("preview_url")
-    @Expose
-    private String previewUrl;
+public class Thumbnails extends RealmObject {
 
-    /**
-     * 
-     * @return
-     *     The teaserUrl
-     */
-    public String getTeaserUrl() {
-        return teaserUrl;
-    }
+  @PrimaryKey
+  @SerializedName("teaser_url")
+  @Expose
+  private String teaserUrl;
+  @SerializedName("preview_url")
+  @Expose
+  private String previewUrl;
 
-    /**
-     * 
-     * @param teaserUrl
-     *     The teaser_url
-     */
-    public void setTeaserUrl(String teaserUrl) {
-        this.teaserUrl = teaserUrl;
-    }
+  /**
+   * @return The teaserUrl
+   */
+  public String getTeaserUrl() {
+    return teaserUrl;
+  }
 
-    /**
-     * 
-     * @return
-     *     The previewUrl
-     */
-    public String getPreviewUrl() {
-        return previewUrl;
-    }
+  /**
+   * @param teaserUrl The teaser_url
+   */
+  public void setTeaserUrl(String teaserUrl) {
+    this.teaserUrl = teaserUrl;
+  }
 
-    /**
-     * 
-     * @param previewUrl
-     *     The preview_url
-     */
-    public void setPreviewUrl(String previewUrl) {
-        this.previewUrl = previewUrl;
-    }
+  /**
+   * @return The previewUrl
+   */
+  public String getPreviewUrl() {
+    return previewUrl;
+  }
+
+  /**
+   * @param previewUrl The preview_url
+   */
+  public void setPreviewUrl(String previewUrl) {
+    this.previewUrl = previewUrl;
+  }
 
 }

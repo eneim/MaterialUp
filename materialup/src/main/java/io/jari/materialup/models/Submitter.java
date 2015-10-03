@@ -4,68 +4,60 @@ package io.jari.materialup.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Submitter {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-    @Expose
-    private String url;
-    @Expose
-    private String nickname;
-    @SerializedName("full_name")
-    @Expose
-    private String fullName;
+public class Submitter extends RealmObject {
 
-    /**
-     * 
-     * @return
-     *     The url
-     */
-    public String getUrl() {
-        return url;
-    }
+  @PrimaryKey
+  @Expose
+  private String url;
+  @Expose
+  private String nickname;
+  @SerializedName("full_name")
+  @Expose
+  private String fullName;
 
-    /**
-     * 
-     * @param url
-     *     The url
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  /**
+   * @return The url
+   */
+  public String getUrl() {
+    return url;
+  }
 
-    /**
-     * 
-     * @return
-     *     The nickname
-     */
-    public String getNickname() {
-        return nickname;
-    }
+  /**
+   * @param url The url
+   */
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-    /**
-     * 
-     * @param nickname
-     *     The nickname
-     */
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+  /**
+   * @return The nickname
+   */
+  public String getNickname() {
+    return nickname;
+  }
 
-    /**
-     * 
-     * @return
-     *     The fullName
-     */
-    public String getFullName() {
-        return fullName;
-    }
+  /**
+   * @param nickname The nickname
+   */
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
 
-    /**
-     * 
-     * @param fullName
-     *     The full_name
-     */
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+  /**
+   * @return The fullName
+   */
+  public String getFullName() {
+    return fullName;
+  }
+
+  /**
+   * @param fullName The full_name
+   */
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
 
 }

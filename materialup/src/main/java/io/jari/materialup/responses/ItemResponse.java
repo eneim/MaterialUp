@@ -1,13 +1,14 @@
 package io.jari.materialup.responses;
 
+import io.jari.materialup.models.Item;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import io.jari.materialup.models.Item;
 
 /**
  * Created by rsicarelli on 7/15/15.
  */
+@Deprecated
 public class ItemResponse {
 
     private List<Item> mItemList = new ArrayList<>();

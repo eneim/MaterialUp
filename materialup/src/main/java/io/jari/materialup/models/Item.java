@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Created by jari on 07/06/15.
  */
+@Deprecated
 public class Item implements Serializable {
 
     private String id;

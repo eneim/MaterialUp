@@ -4,13 +4,17 @@ package io.jari.materialup.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 import java.util.List;
 
-public class Post {
+public class Post extends RealmObject {
 
   @Expose
   private String name;
+  @PrimaryKey
   @Expose
   private int id;
   @Expose
@@ -42,8 +46,14 @@ public class Post {
   private String publishedAt;
   @Expose
   private Submitter submitter;
+
+//  @Ignore
+//  @SerializedName("makers")
+//  @Expose
+//  private List<Maker> makersList = new ArrayList<Maker>();
+
   @Expose
-  private List<Maker> makers = new ArrayList<Maker>();
+  private RealmList<Maker> makers = new RealmList<>();
   @Expose
   private Category category;
 
@@ -244,20 +254,6 @@ public class Post {
   }
 
   /**
-   * @return The makers
-   */
-  public List<Maker> getMakers() {
-    return makers;
-  }
-
-  /**
-   * @param makers The makers
-   */
-  public void setMakers(List<Maker> makers) {
-    this.makers = makers;
-  }
-
-  /**
    * @return The category
    */
   public Category getCategory() {
@@ -271,4 +267,26 @@ public class Post {
     this.category = category;
   }
 
+//  public List<Maker> getMakersList() {
+////    return makersList;
+//    return makers.subList(0, makers.size());
+//  }
+
+//  public void setMakersList(List<Maker> makersList) {
+//    this.makersList = makersList;
+//  }
+
+  public RealmList<Maker> getMakers() {
+    return makers;
+  }
+
+  public void setMakers(RealmList<Maker> makers) {
+    this.makers = makers;
+  }
+
+  public void setMakers(List<Maker> makerList) {
+    for (Maker maker : makerList) {
+      this.makers.add(maker);
+    }
+  }
 }
