@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.jari.materialup.R;
+import io.jari.materialup.models.Maker;
 import io.jari.materialup.models.Post;
 
 import java.util.ArrayList;
@@ -85,9 +85,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
   @Override
   public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     // create a new view
-    CardView card = (CardView) LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_card, parent, false);
-
+    View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
     return new ViewHolder(card, mContext);
   }
 
@@ -103,30 +101,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
-    public CardView cardView;
     public Activity context;
     public Post item;
-    @Bind(R.id.title)
-    TextView title;
-    @Bind(R.id.details)
-    TextView details;
-    @Bind(R.id.label)
-    TextView label;
-    @Bind(R.id.score)
-    TextView score;
-    @Bind(R.id.comments)
-    TextView comments;
-    @Bind(R.id.views)
-    TextView views;
-    @Bind(R.id.avatar)
-    CircleImageView avatar;
-    public ViewHolder(CardView v, final Activity context) {
+    @Bind(R.id.title) TextView title;
+    @Bind(R.id.details) TextView details;
+    @Bind(R.id.label) TextView label;
+    @Bind(R.id.score) TextView score;
+    @Bind(R.id.comments) TextView comments;
+    @Bind(R.id.views) TextView views;
+    @Bind(R.id.avatar) CircleImageView avatar;
+    @Bind(R.id.image) ImageView image;
+
+    public ViewHolder(View v, final Activity context) {
       super(v);
-      cardView = v;
       this.context = context;
-
       ButterKnife.bind(this, v);
-
       v.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -140,8 +129,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
       title.setText(item.getName());
 
       if (item.getMakers().size() > 0) {
-        details.setText(item.getCategory().getName() +
-            " by " + item.getMakers().get(0).getNickname());
+        details.setText(
+            new StringBuilder()
+                .append(item.getCategory().getName())
+                .append(" by ")
+                .append(item.getMakers().get(0).getNickname())
+                .toString());
       } else {
         details.setText(item.getCategory().getName());
       }
@@ -154,12 +147,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         label.setText(item.getLabel());
       }
 
-      score.setText(item.getUpvotesCount() + "");
-      comments.setText(item.getCommentsCount() + "");
-      views.setText(item.getViewCount() + "");
+      score.setText(String.format("%d", item.getUpvotesCount()));
+      comments.setText(String.format("%d", item.getCommentsCount()));
+      views.setText(String.format("%d", item.getViewCount()));
 
       if (item.getThumbnails() != null && !"".equals(item.getThumbnails().getTeaserUrl())) {
-        final ImageView image = (ImageView) cardView.findViewById(R.id.image);
         image.setVisibility(View.VISIBLE);
         DrawableRequestBuilder<String> request = Glide.with(context)
             .load(item.getThumbnails().getTeaserUrl())
@@ -169,39 +161,36 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
           request.diskCacheStrategy(DiskCacheStrategy.SOURCE).into(image);
         else request.into(image);
 
-      } else cardView.findViewById(R.id.image).setVisibility(View.GONE);
+      } else image.setVisibility(View.GONE);
 
-      boolean generateLetter = false;
-      try {
-//        if (item.getMakers().get(0).getUrl() != null && !item.getMakerAvatar().equals("")) {
-//          Glide.with(context)
-//              .load(item.getMakerAvatar())
-//              .into(avatar);
-//        } else {
-//          generateLetter = true;
-//        }
-      } catch (NullPointerException e) {
-        //so there's like this weird bug where twitter doesn't pass a content-type.
-        //glide doesn't know what to do and crashes.
-        generateLetter = true;
+      boolean letterForAvatar = false;
+      Maker firstMaker = null;
+      if (item.getMakers().size() > 0) {
+        firstMaker = item.getMakers().get(0);
+        try {
+          if (firstMaker.getUrl() != null &&
+              !"".endsWith(firstMaker.getUrl())) {
+            Glide.with(context)
+                .load(firstMaker.getUrl())
+                .into(avatar);
+          } else {
+            letterForAvatar = true;
+          }
+        } catch (NullPointerException e) {
+          //so there's like this weird bug where twitter doesn't pass a content-type.
+          //glide doesn't know what to do and crashes.
+          letterForAvatar = true;
+        }
       }
 
-      if (generateLetter) {
-        Bitmap bitmap = drawableToBitmap(
-            TextDrawable
-                .builder()
-                .buildRect(
-                    item.getMakers().get(0).getFullName().substring(0, 1).toUpperCase(),
-                    ColorGenerator.MATERIAL.getColor(item.getMakers().get(0).getFullName())
-                )
-        );
+      // FIXME placeholder, wait for User API
+      letterForAvatar = true;
+      if (letterForAvatar) {
+        String seed = firstMaker != null ? firstMaker.getNickname().substring(0, 1) : "U";
+        Bitmap bitmap = drawableToBitmap(TextDrawable.builder()
+            .buildRect(seed.toUpperCase(), ColorGenerator.MATERIAL.getColor(seed)));
 
-        avatar.setImageDrawable(
-            new BitmapDrawable(
-                context.getResources(),
-                bitmap
-            )
-        );
+        avatar.setImageBitmap(bitmap);
       }
 
     }
